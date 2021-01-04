@@ -1,0 +1,87 @@
+<div class="myDiv">
+  <h5 class="myDiv-header">Loan Calculator</h5>
+  <div class="myDiv-body">
+    <form (ngSubmit)="onSubmit()" [formGroup]="form">
+      <div class="form-group row">
+        <label for="colFormLabel" class="col-sm-4 col-form-label">Amount</label>
+        <div class="col-sm-8">
+          <div class="input-group">
+            <input type="number" class="form-control" id="amount" formControlName="amount" required>
+          </div>
+          <div *ngIf="amount.invalid && (amount.dirty || amount.touched)">
+            <div class="text-danger">
+              Amount has to be greater than 0.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="colFormLabel" class="col-sm-4 ">Rate</label>
+        <div class="col-sm-8">
+          <div class="input-group">
+            <input formControlName="rate" [ngModel]="loanRate" disabled> 
+            <div class="input-group-append">
+              <span class="input-group-text">%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="colFormLabel" class="col-sm-4 col-form-label">Years</label>
+        <div class="col-sm-8">
+          <div class="input-group">
+            <input type="number" class="form-control" id="years" formControlName="years" required>
+          </div>
+          <div *ngIf="years.invalid && (years.dirty || years.touched)">
+            <div *ngIf="years.errors.required || years.errors.min">
+              <div class="text-danger">
+                Please provide a valid years (at least 1 year).
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="justify-content-center">
+        <button type="submit" class="btn btn-success">Calculate</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="myDiv mt-2">
+    <h5 class="myDiv-header">Monthly Payments</h5>
+    <div class="myDiv-body">
+      <div class="row" [ngSwitch]="result > 0">
+        <div class="col-md-2 text-center">
+          <p>Amount</p>
+          <div>
+            <p *ngSwitchCase="false">&mdash;</p>
+            <h5 *ngSwitchCase="true">{{calculation.amount | number: '1.0-0'}}</h5>
+          </div>
+        </div>
+        <div class="col-md-2 text-center">
+          <p>Rate</p>
+          <p *ngSwitchCase="false">&mdash;</p>
+          <h5 *ngSwitchCase="true">{{loanRate}}%</h5>
+        </div>
+        <div class="col-md-2 text-center">
+          <p>Years</p>
+          <p *ngSwitchCase="false">&mdash;</p>
+          <h5 *ngSwitchCase="true">{{calculation.years}}</h5>
+        </div>
+        <div class="col-md-2 text-center">
+          <p>Monthly Payments</p>
+          <p *ngSwitchCase="false">&mdash;</p>
+          <h5 *ngSwitchCase="true">{{result}}</h5>
+        </div>
+        <div class="col-md-2 text-center">
+          <p>Total Cost of Loan</p>
+          <p *ngSwitchCase="false">&mdash;</p>
+          <h5 *ngSwitchCase="true">{{(result*calculation.years*12) | number: '1.0-0'}}</h5>
+        </div>
+      </div>
+  </div>
+</div>
